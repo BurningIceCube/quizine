@@ -135,3 +135,19 @@ func (q *Quiz) GetCorrectCount() int {
 func (q *Quiz) GetQuestionHistory() []QuestionResult {
 	return q.questionHistory
 }
+
+func (q *Quiz) GetCurrentIndex() int {
+	return q.currentIndex
+}
+
+func (q *Quiz) GetScore() int {
+	return q.score
+}
+
+func (q *Quiz) GetStartTime() time.Time {
+	return q.startTime
+}
+
+func (q *Quiz) GetQuestions() []Questioner {
+	return q.questions
+}
