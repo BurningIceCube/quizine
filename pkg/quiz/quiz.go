@@ -151,3 +151,20 @@ func (q *Quiz) GetStartTime() time.Time {
 func (q *Quiz) GetQuestions() []Questioner {
 	return q.questions
 }
+
+// NewQuizFromDB creates a quiz from database data
+func NewQuizFromDB(id string, questions []Questioner, status QuizStatus, currentIndex int, score int, completed bool, startTime time.Time, creationDate time.Time, timeTaken time.Duration, correctCount int, history []QuestionResult) *Quiz {
+	return &Quiz{
+		Id:              id,
+		questions:       questions,
+		currentIndex:    currentIndex,
+		score:           score,
+		completed:       completed,
+		status:          status,
+		startTime:       startTime,
+		creationDate:    creationDate,
+		timeTaken:       timeTaken,
+		correctCount:    correctCount,
+		questionHistory: history,
+	}
+}

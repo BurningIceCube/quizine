@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/BurningIceCube/quizine/internal/quiz"
+	"github.com/BurningIceCube/quizine/pkg/quiz"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -221,7 +221,19 @@ func (qs *QuizStore) GetQuiz(id string) (*quiz.Quiz, error) {
 		})
 	}
 
-	return quiz.NewQuiz(id, questions), nil
+	return quiz.NewQuizFromDB(
+		id,
+		questions,
+		quiz.QuizStatus(status),
+		currentIndex,
+		score,
+		completed,
+		startTime,
+		creationDate,
+		time.Duration(timeTaken)*time.Millisecond,
+		correctCount,
+		history,
+	), nil
 }
 
 func (qs *QuizStore) DeleteQuiz(id string) error {

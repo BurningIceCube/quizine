@@ -5,10 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/BurningIceCube/quizine/internal/quiz"
+	"github.com/BurningIceCube/quizine/pkg/quiz"
 )
 
 func TestQuizStore(t *testing.T) {
+	// Skip test if CGO is disabled
+	if os.Getenv("CGO_ENABLED") == "0" {
+		t.Skip("Skipping test because CGO is disabled")
+	}
+
 	// Create a temporary database file
 	dbPath := "test_quizzes.db"
 	defer os.Remove(dbPath)
@@ -37,6 +42,13 @@ func TestQuizStore(t *testing.T) {
 			Answer:     true,
 			TimeLimit:  15 * time.Second,
 		},
+	}
+
+	// Save questions to the database first
+	for _, q := range questions {
+		if err := store.questionStore.SaveQuestion(q); err != nil {
+			t.Fatalf("Failed to save question: %v", err)
+		}
 	}
 
 	// Create a new quiz
@@ -95,8 +107,20 @@ func TestQuizStore(t *testing.T) {
 
 	// Test quiz with history
 	quiz2 := quiz.NewQuiz("quiz2", questions)
-	quiz2.SubmitAnswer("4")     // Correct answer
+
+	// Answer first question
+	if quiz2.CurrentQuestion() == nil {
+		t.Fatal("Expected current question not to be nil")
+	}
+	quiz2.SubmitAnswer("4") // Correct answer
+	quiz2.NextQuestion()
+
+	// Answer second question
+	if quiz2.CurrentQuestion() == nil {
+		t.Fatal("Expected current question not to be nil")
+	}
 	quiz2.SubmitAnswer("false") // Incorrect answer
+	quiz2.NextQuestion()
 
 	if err := store.SaveQuiz(quiz2); err != nil {
 		t.Errorf("Failed to save quiz with history: %v", err)

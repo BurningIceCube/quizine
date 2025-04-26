@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/BurningIceCube/quizine/internal/quiz"
+	"github.com/BurningIceCube/quizine/pkg/quiz"
 
 	_ "github.com/mattn/go-sqlite3"
 )

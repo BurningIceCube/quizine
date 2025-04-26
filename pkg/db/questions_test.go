@@ -5,10 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/BurningIceCube/quizine/internal/quiz"
+	"github.com/BurningIceCube/quizine/pkg/quiz"
 )
 
 func TestQuestionStore(t *testing.T) {
+	// Skip test if CGO is disabled
+	if os.Getenv("CGO_ENABLED") == "0" {
+		t.Skip("Skipping test because CGO is disabled")
+	}
+
 	// Create a temporary database file
 	dbPath := "test_questions.db"
 	defer os.Remove(dbPath)
