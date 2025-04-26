@@ -34,8 +34,11 @@ func createTestQuestions() []Questioner {
 
 func TestNewQuiz(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
+	if quiz.Id != "quiz1" {
+		t.Errorf("Expected ID 'quiz1', got '%s'", quiz.Id)
+	}
 	if quiz.AmountOfQuestions() != 3 {
 		t.Errorf("Expected 3 questions, got %d", quiz.AmountOfQuestions())
 	}
@@ -58,7 +61,7 @@ func TestNewQuiz(t *testing.T) {
 
 func TestQuizStatus(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test initial status
 	if quiz.GetStatus() != STARTED {
@@ -83,11 +86,23 @@ func TestQuizStatus(t *testing.T) {
 	if quiz.GetStatus() != FINISHED {
 		t.Errorf("Expected status FINISHED, got %v", quiz.GetStatus())
 	}
+
+	// Test SAVED status
+	quiz.status = SAVED
+	if quiz.GetStatus() != SAVED {
+		t.Errorf("Expected status SAVED, got %v", quiz.GetStatus())
+	}
+
+	// Test QUIT status
+	quiz.status = QUIT
+	if quiz.GetStatus() != QUIT {
+		t.Errorf("Expected status QUIT, got %v", quiz.GetStatus())
+	}
 }
 
 func TestTimeTracking(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test creation date is set
 	if quiz.GetCreationDate().IsZero() {
@@ -109,7 +124,7 @@ func TestTimeTracking(t *testing.T) {
 
 func TestQuestionHistory(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test correct answer history
 	quiz.SubmitAnswer("4")
@@ -138,7 +153,7 @@ func TestQuestionHistory(t *testing.T) {
 
 func TestCorrectCount(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test initial count
 	if quiz.GetCorrectCount() != 0 {
@@ -161,7 +176,7 @@ func TestCorrectCount(t *testing.T) {
 
 func TestCurrentQuestion(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test first question
 	current := quiz.CurrentQuestion()
@@ -182,7 +197,7 @@ func TestCurrentQuestion(t *testing.T) {
 
 func TestNextQuestion(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test first next
 	if !quiz.NextQuestion() {
@@ -211,7 +226,7 @@ func TestNextQuestion(t *testing.T) {
 
 func TestSubmitAnswer(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test correct answer
 	if !quiz.SubmitAnswer("4") {
@@ -238,7 +253,7 @@ func TestSubmitAnswer(t *testing.T) {
 
 func TestProgress(t *testing.T) {
 	questions := createTestQuestions()
-	quiz := NewQuiz(questions)
+	quiz := NewQuiz("quiz1", questions)
 
 	// Test initial progress
 	current, total := quiz.Progress()

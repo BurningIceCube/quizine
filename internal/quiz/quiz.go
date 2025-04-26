@@ -9,6 +9,8 @@ const (
 	AWAITING_ANSWER QuizStatus = "AWAITING_ANSWER"
 	ANSWERED        QuizStatus = "ANSWERED"
 	FINISHED        QuizStatus = "FINISHED"
+	SAVED           QuizStatus = "SAVED"
+	QUIT            QuizStatus = "QUIT"
 )
 
 type QuestionResult struct {
@@ -18,6 +20,7 @@ type QuestionResult struct {
 }
 
 type Quiz struct {
+	Id              string
 	questions       []Questioner
 	currentIndex    int
 	score           int
@@ -30,8 +33,9 @@ type Quiz struct {
 	questionHistory []QuestionResult
 }
 
-func NewQuiz(questions []Questioner) *Quiz {
+func NewQuiz(id string, questions []Questioner) *Quiz {
 	return &Quiz{
+		Id:              id,
 		questions:       questions,
 		currentIndex:    0,
 		score:           0,
